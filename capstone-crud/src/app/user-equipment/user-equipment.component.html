@@ -1,0 +1,85 @@
+<div class="container-equipment">
+  <div class="container-inside">
+    <div class="card">
+      <div class="header">
+        <p>
+          <mat-icon fontIcon="devices" aria-hidden="false"> </mat-icon>Equipment
+        </p>
+        <button class="btn btn-primary" (click)="refreshTable()">
+          <mat-icon fontIcon="refresh" aria-hidden="false"></mat-icon>
+          Refresh
+        </button>
+      </div>
+      <!-- Loader -->
+      <div class="loader-container" *ngIf="!isResultLoaded">
+        <div class="loader">
+          <label
+            >Sorry, we're having trouble loading the database. Try reloading the
+            page.</label
+          >
+          <div class="loading"></div>
+        </div>
+      </div>
+      <form>
+        <div class="container-filter">
+          <select
+            [(ngModel)]="SelectedCourseID"
+            [ngModelOptions]="{ standalone: true }"
+          >
+            <option
+              *ngFor="let course of CourseArray"
+              [value]="course.CourseID"
+            >
+              {{ course.CourseName }}
+            </option>
+          </select>
+          <button (click)="filterEquipments()">Filter</button>
+          <button (click)="clearFilter()">Clear</button>
+        </div>
+      </form>
+      <div class="container-search">
+        <input
+          type="text"
+          [(ngModel)]="searchValue"
+          placeholder="Search Equipment Name"
+        />
+        <button class="btn btn-primary" (click)="searchEquipment()">Search</button>
+        <button class="btn btn-secondary" (click)="clearSearch()">Clear</button>
+      </div>
+    </div>
+
+
+    <div class="container-table">
+      <table cellspacing="0">
+        <thead>
+          <tr>
+            <th scope="col">Equipment Name</th>
+            <th scope="col">Quantity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let EquipmentItem of EquipmentArray
+                | paginate
+                  : {
+                      itemsPerPage: itemsPerPage,
+                      currentPage: p,
+                      totalItems: EquipmentArray.length
+                    }
+            "
+          >
+            <td>{{ EquipmentItem.EquipmentName }}</td>
+            <td>{{ EquipmentItem.Quantity }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="table-pagination-outer">
+        <pagination-controls
+          class="table-pagination-inner"
+          (pageChange)="p = $event"
+        ></pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>
